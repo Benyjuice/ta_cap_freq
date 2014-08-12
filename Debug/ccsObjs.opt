@@ -1,0 +1,1 @@
+"./clk.obj" "./freq_cap.obj" "./main.obj" "./spi_dac8043.obj" "../lnk_msp430f5529.cmd" -l"libc.a" -l"libmath.a" 
