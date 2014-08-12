@@ -13,7 +13,7 @@ void spi_init()
 	P4SEL |= BIT1+BIT2+BIT3;//Pin select
 	P4DIR |= BIT0;
 	UCB1CTL1 |= UCSWRST;                      // **Put state machine in reset**
-	UCB1CTL0 |= UCMST+UCSYNC+UCCKPL+UCMSB;    // 3-pin, 8-bit SPI master
+	UCB1CTL0 |= UCMST+UCSYNC+UCCKPH+UCMSB;    // 3-pin, 8-bit SPI master
 	                                            // Clock polarity high, MSB
 	UCB1CTL1 |= UCSSEL_2;                     // SMCLK
 	UCB1BR0 = 0;                           // /0
