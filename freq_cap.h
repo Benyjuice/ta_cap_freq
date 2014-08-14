@@ -7,7 +7,7 @@
 
 #ifndef FREQ_CAP_H_
 #define FREQ_CAP_H_
-#define F_MEAS_NUM								9
+#define F_MEAS_NUM								3
 #define F_MEAS_FREQ								4000000//4MHz
 
 void freq_cap_init();

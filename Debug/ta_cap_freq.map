@@ -1,10 +1,10 @@
 ******************************************************************************
                   MSP430 Linker Unix v4.3.3                    
 ******************************************************************************
->> Linked Tue Aug 12 22:59:38 2014
+>> Linked Thu Aug 14 14:24:20 2014
 
 OUTPUT FILE NAME:   <ta_cap_freq.out>
-ENTRY POINT SYMBOL: "_c_int00"  address: 000044a4
+ENTRY POINT SYMBOL: "_c_int00"  address: 00004616
 
 
 MEMORY CONFIGURATION
@@ -19,8 +19,8 @@ MEMORY CONFIGURATION
   INFOB                 00001900   00000080  00000000  00000080  RWIX
   INFOA                 00001980   00000080  00000000  00000080  RWIX
   USBRAM                00001c00   00000800  00000000  00000800  RWIX
-  RAM                   00002400   00002000  000000b8  00001f48  RWIX
-  FLASH                 00004400   0000bb80  000000fc  0000ba84  RWIX
+  RAM                   00002400   00002000  000000b7  00001f49  RWIX
+  FLASH                 00004400   0000bb80  0000026e  0000b912  RWIX
   INT00                 0000ff80   00000002  00000000  00000002  RWIX
   INT01                 0000ff82   00000002  00000000  00000002  RWIX
   INT02                 0000ff84   00000002  00000000  00000002  RWIX
@@ -85,7 +85,7 @@ MEMORY CONFIGURATION
   INT61                 0000fffa   00000002  00000002  00000000  RWIX
   INT62                 0000fffc   00000002  00000002  00000000  RWIX
   RESET                 0000fffe   00000002  00000002  00000000  RWIX
-  FLASH2                00010000   00014400  00000354  000140ac  RWIX
+  FLASH2                00010000   00014400  00000818  00013be8  RWIX
 
 
 SECTION ALLOCATION MAP
@@ -96,35 +96,43 @@ section   page    origin      length       input sections
 .init_array 
 *          0    00004400    00000000     UNINITIALIZED
 
-.data      0    00002400    00000014     UNINITIALIZED
-                  00002400    00000012     freq_cap.obj (.data:freq_cap_tar)
-                  00002412    00000002     freq_cap.obj (.data)
+.data      0    00002400    00000010     UNINITIALIZED
+                  00002400    00000007     MatrixKey.obj (.data)
+                  00002407    00000001     --HOLE--
+                  00002408    00000006     freq_cap.obj (.data:freq_cap_tar)
+                  0000240e    00000002     freq_cap.obj (.data)
 
 .TI.persistent 
 *          0    00002400    00000000     UNINITIALIZED
 
-.bss       0    00002414    00000004     UNINITIALIZED
-                  00002414    00000004     (.common:freq)
+.bss       0    00002410    00000007     UNINITIALIZED
+                  00002410    00000004     (.common:freq)
+                  00002414    00000001     (.common:dec)
+                  00002415    00000001     (.common:hud)
+                  00002416    00000001     (.common:sig)
 
 .TI.noinit 
-*          0    00002414    00000000     UNINITIALIZED
+*          0    00002410    00000000     UNINITIALIZED
 
 .stack     0    00004360    000000a0     UNINITIALIZED
                   00004360    00000004     rts430x_lc_rd_eabi.lib : boot.obj (.stack)
                   00004364    0000009c     --HOLE--
 
 .text:_isr 
-*          0    00004400    000000d0     
-                  00004400    000000a4     freq_cap.obj (.text:_isr:TIMER2_A0_ISR)
-                  000044a4    0000001a     rts430x_lc_rd_eabi.lib : boot.obj (.text:_isr:_c_int00_noexit)
-                  000044be    00000012     freq_cap.obj (.text:_isr:TIMER0_A0_ISR)
+*          0    00004400    00000230     
+                  00004400    00000154     main.obj (.text:_isr:TIMER1_A0_ISR)
+                  00004554    000000a4     freq_cap.obj (.text:_isr:TIMER2_A0_ISR)
+                  000045f8    0000001e     freq_cap.obj (.text:_isr:TIMER0_A0_ISR)
+                  00004616    0000001a     rts430x_lc_rd_eabi.lib : boot.obj (.text:_isr:_c_int00_noexit)
 
-.cinit     0    000044d0    0000002c     
-                  000044d0    0000000c     (__TI_handler_table)
-                  000044dc    00000009     (.cinit..data.load) [load image, compression = rle]
-                  000044e5    00000001     --HOLE-- [fill = 0]
-                  000044e6    00000006     (.cinit..bss.load) [load image, compression = zero_init]
-                  000044ec    00000010     (__TI_cinit_table)
+.const     0    00004630    00000012     
+                  00004630    00000012     main.obj (.const:.string)
+
+.cinit     0    00004642    0000002c     
+                  00004642    0000000c     (__TI_handler_table)
+                  0000464e    0000000a     (.cinit..data.load) [load image, compression = rle]
+                  00004658    00000006     (.cinit..bss.load) [load image, compression = zero_init]
+                  0000465e    00000010     (__TI_cinit_table)
 
 RTC        0    0000ffd2    00000002     
                   0000ffd2    00000002     rts430x_lc_rd_eabi.lib : int41.obj (.int41)
@@ -155,7 +163,7 @@ TIMER1_A1
 
 TIMER1_A0 
 *          0    0000ffe2    00000002     
-                  0000ffe2    00000002     rts430x_lc_rd_eabi.lib : int49.obj (.int49)
+                  0000ffe2    00000002     main.obj (.int49)
 
 DMA        0    0000ffe4    00000002     
                   0000ffe4    00000002     rts430x_lc_rd_eabi.lib : int50.obj (.int50)
@@ -203,37 +211,50 @@ SYSNMI     0    0000fffc    00000002
 .reset     0    0000fffe    00000002     
                   0000fffe    00000002     rts430x_lc_rd_eabi.lib : boot.obj (.reset)
 
-.text      0    00010000    00000354     
-                  00010000    0000008e     clk.obj (.text:clk_init)
-                  0001008e    0000006e     rts430x_lc_rd_eabi.lib : autoinit.obj (.text:_auto_init_hold_wdt)
-                  000100fc    00000062                            : copy_decompress_rle.obj (.text:__TI_decompress_rle_core)
-                  0001015e    00000058                            : div32u.obj (.text)
-                  000101b6    0000004e     clk.obj (.text:SetVcoreUp)
-                  00010204    0000003e     rts430x_lc_rd_eabi.lib : lsr32.obj (.text:l_lsr_const)
-                  00010242    00000032                            : fs_ultof.obj (.text)
-                  00010274    0000002a     freq_cap.obj (.text:freq_cap_init)
-                  0001029e    00000028     spi_dac8043.obj (.text:spi_init)
-                  000102c6    00000024     rts430x_lc_rd_eabi.lib : copy_zero_init.obj (.text:decompress:ZI:__TI_zero_init)
-                  000102ea    0000001a     spi_dac8043.obj (.text:spi_write)
-                  00010304    00000016     main.obj (.text:main)
-                  0001031a    00000014     rts430x_lc_rd_eabi.lib : memcpy.obj (.text:memcpy)
-                  0001032e    00000012                            : copy_decompress_none.obj (.text:decompress:none:__TI_decompress_none)
-                  00010340    00000006                            : isr_trap.obj (.text:__TI_ISR_TRAP)
-                  00010346    00000006                            : copy_decompress_rle.obj (.text:decompress:rle24:__TI_decompress_rle24)
-                  0001034c    00000004                            : pre_init.obj (.text:_system_pre_init)
-                  00010350    00000004                            : exit.obj (.text:abort)
+.text      0    00010000    00000818     
+                  00010000    0000014c     MatrixKey.obj (.text:GetKeyValue)
+                  0001014c    000000b0     MatrixKey.obj (.text:KeyScan)
+                  000101fc    0000008e     clk.obj (.text:clk_init)
+                  0001028a    00000074     lcd12864.obj (.text:read_byte)
+                  000102fe    0000006e     rts430x_lc_rd_eabi.lib : autoinit.obj (.text:_auto_init_hold_wdt)
+                  0001036c    00000068                            : fs_toi.obj (.text)
+                  000103d4    00000064     lcd12864.obj (.text:lcd_init)
+                  00010438    00000062     rts430x_lc_rd_eabi.lib : copy_decompress_rle.obj (.text:__TI_decompress_rle_core)
+                  0001049a    00000060     lcd12864.obj (.text:write_zi)
+                  000104fa    00000058     rts430x_lc_rd_eabi.lib : div32u.obj (.text)
+                  00010552    0000004e     clk.obj (.text:SetVcoreUp)
+                  000105a0    0000004c     lcd12864.obj (.text:write_char)
+                  000105ec    00000046     spi_dac8043.obj (.text:spi_write)
+                  00010632    0000003c     main.obj (.text:main)
+                  0001066e    00000036     lcd12864.obj (.text:write)
+                  000106a4    00000032     rts430x_lc_rd_eabi.lib : fs_ultof.obj (.text)
+                  000106d6    0000002c                            : div16s.obj (.text)
+                  00010702    0000002c     lcd12864.obj (.text:write_byte)
+                  0001072e    0000002a     freq_cap.obj (.text:freq_cap_init)
+                  00010758    00000024     rts430x_lc_rd_eabi.lib : copy_zero_init.obj (.text:decompress:ZI:__TI_zero_init)
+                  0001077c    0000001a     MatrixKey.obj (.text:key_Init)
+                  00010796    00000016     rts430x_lc_rd_eabi.lib : memset.obj (.text:memset)
+                  000107ac    00000016                            : div16u.obj (.text)
+                  000107c2    00000014     lcd12864.obj (.text:lcd_busy)
+                  000107d6    00000014     rts430x_lc_rd_eabi.lib : memcpy.obj (.text:memcpy)
+                  000107ea    00000012                            : copy_decompress_none.obj (.text:decompress:none:__TI_decompress_none)
+                  000107fc    00000008     spi_dac8043.obj (.text:spi_init)
+                  00010804    00000006     rts430x_lc_rd_eabi.lib : isr_trap.obj (.text:__TI_ISR_TRAP)
+                  0001080a    00000006                            : copy_decompress_rle.obj (.text:decompress:rle24:__TI_decompress_rle24)
+                  00010810    00000004                            : pre_init.obj (.text:_system_pre_init)
+                  00010814    00000004                            : exit.obj (.text:abort)
 
 
 LINKER GENERATED COPY TABLES
 
-__TI_cinit_table @ 000044ec records: 2, size/record: 8, table size: 16
-	.data: load addr=000044dc, load size=00000009 bytes, run addr=00002400, run size=00000014 bytes, compression=rle
-	.bss: load addr=000044e6, load size=00000006 bytes, run addr=00002414, run size=00000004 bytes, compression=zero_init
+__TI_cinit_table @ 0000465e records: 2, size/record: 8, table size: 16
+	.data: load addr=0000464e, load size=0000000a bytes, run addr=00002400, run size=00000010 bytes, compression=rle
+	.bss: load addr=00004658, load size=00000006 bytes, run addr=00002410, run size=00000007 bytes, compression=zero_init
 
 
 LINKER GENERATED HANDLER TABLE
 
-__TI_handler_table @ 000044d0 records: 3, size/record: 4, table size: 12
+__TI_handler_table @ 00004642 records: 3, size/record: 4, table size: 12
 	index: 0, handler: __TI_zero_init
 	index: 1, handler: __TI_decompress_rle24
 	index: 2, handler: __TI_decompress_none
@@ -325,7 +346,7 @@ address    name
 00000732   ADC12MEM9
 00000733   ADC12MEM9_H
 00000732   ADC12MEM9_L
-00010350   C$$EXIT
+00010814   C$$EXIT
 000008c0   CBCTL0
 000008c1   CBCTL0_H
 000008c0   CBCTL0_L
@@ -405,6 +426,8 @@ address    name
 00000146   FCTL4
 00000147   FCTL4_H
 00000146   FCTL4_L
+00010000   GetKeyValue
+0001014c   KeyScan
 000004c4   MAC
 000004da   MAC32H
 000004db   MAC32H_H
@@ -696,7 +719,7 @@ address    name
 0000019a   SYSUNIV
 0000019b   SYSUNIV_H
 0000019a   SYSUNIV_L
-000101b6   SetVcoreUp
+00010552   SetVcoreUp
 00000352   TA0CCR0
 00000354   TA0CCR1
 00000356   TA0CCR2
@@ -749,8 +772,9 @@ address    name
 000003e0   TB0EX0
 000003ee   TB0IV
 000003d0   TB0R
-000044be   TIMER0_A0_ISR
-00004400   TIMER2_A0_ISR
+000045f8   TIMER0_A0_ISR
+00004400   TIMER1_A0_ISR
+00004554   TIMER2_A0_ISR
 000005d0   UCA0ABCTL
 000005c6   UCA0BRW
 000005c7   UCA0BRW_H
@@ -991,16 +1015,16 @@ address    name
 0000015c   WDTCTL_L
 00004400   __STACK_END
 000000a0   __STACK_SIZE
-000044ec   __TI_CINIT_Base
-000044fc   __TI_CINIT_Limit
-000044d0   __TI_Handler_Table_Base
-000044dc   __TI_Handler_Table_Limit
+0000465e   __TI_CINIT_Base
+0000466e   __TI_CINIT_Limit
+00004642   __TI_Handler_Table_Base
+0000464e   __TI_Handler_Table_Limit
 UNDEFED    __TI_INITARRAY_Base
 UNDEFED    __TI_INITARRAY_Limit
-00010340   __TI_ISR_TRAP
+00010804   __TI_ISR_TRAP
 00000001   __TI_args_main
-0001032e   __TI_decompress_none
-00010346   __TI_decompress_rle24
+000107ea   __TI_decompress_none
+0001080a   __TI_decompress_rle24
 00000001   __TI_exit
 0000ffd2   __TI_int41
 0000ffd4   __TI_int42
@@ -1024,42 +1048,44 @@ UNDEFED    __TI_INITARRAY_Limit
 0000fff8   __TI_int60
 0000fffa   __TI_int61
 0000fffc   __TI_int62
-000102c6   __TI_zero_init
+00010758   __TI_zero_init
 ffffffff   __binit__
 ffffffff   __c_args__
-0001015e   __mspabi_divul
-00010242   __mspabi_fltulf
-0001015e   __mspabi_remul
-0001023c   __mspabi_srll_1
-00010218   __mspabi_srll_10
-00010214   __mspabi_srll_11
-00010210   __mspabi_srll_12
-0001020c   __mspabi_srll_13
-00010208   __mspabi_srll_14
-00010204   __mspabi_srll_15
-00010238   __mspabi_srll_2
-00010234   __mspabi_srll_3
-00010230   __mspabi_srll_4
-0001022c   __mspabi_srll_5
-00010228   __mspabi_srll_6
-00010224   __mspabi_srll_7
-00010220   __mspabi_srll_8
-0001021c   __mspabi_srll_9
-0001008e   _auto_init_hold_wdt
-000044a4   _c_int00
-000044a4   _c_int00_noexit
+000106d6   __mspabi_divi
+000107ac   __mspabi_divu
+000104fa   __mspabi_divul
+0001036c   __mspabi_fixfi
+000106a4   __mspabi_fltulf
+000106d6   __mspabi_remi
+000107ac   __mspabi_remu
+000104fa   __mspabi_remul
+000102fe   _auto_init_hold_wdt
+00004616   _c_int00
+00004616   _c_int00_noexit
 0000fffe   _reset_vector
 00004360   _stack
-0001034c   _system_pre_init
-00010350   abort
+00010810   _system_pre_init
+00010814   abort
 ffffffff   binit
-00010000   clk_init
-00002414   freq
-00010274   freq_cap_init
-00010304   main
-0001031a   memcpy
-0001029e   spi_init
-000102ea   spi_write
+000101fc   clk_init
+00002414   dec
+00002410   freq
+0001072e   freq_cap_init
+00002415   hud
+0001077c   key_Init
+000107c2   lcd_busy
+000103d4   lcd_init
+00010632   main
+000107d6   memcpy
+00010796   memset
+0001028a   read_byte
+00002416   sig
+000107fc   spi_init
+000105ec   spi_write
+0001066e   write
+00010702   write_byte
+000105a0   write_char
+0001049a   write_zi
 
 
 GLOBAL SYMBOLS: SORTED BY Symbol Address 
@@ -1811,17 +1837,21 @@ address    name
 000023fd   USBIEPBBAY_7
 000023fe   USBIEPBCTY_7
 000023ff   USBIEPSIZXY_7
-00002414   freq
+00002410   freq
+00002414   dec
+00002415   hud
+00002416   sig
 00004360   _stack
-00004400   TIMER2_A0_ISR
+00004400   TIMER1_A0_ISR
 00004400   __STACK_END
-000044a4   _c_int00
-000044a4   _c_int00_noexit
-000044be   TIMER0_A0_ISR
-000044d0   __TI_Handler_Table_Base
-000044dc   __TI_Handler_Table_Limit
-000044ec   __TI_CINIT_Base
-000044fc   __TI_CINIT_Limit
+00004554   TIMER2_A0_ISR
+000045f8   TIMER0_A0_ISR
+00004616   _c_int00
+00004616   _c_int00_noexit
+00004642   __TI_Handler_Table_Base
+0000464e   __TI_Handler_Table_Limit
+0000465e   __TI_CINIT_Base
+0000466e   __TI_CINIT_Limit
 0000ffd2   __TI_int41
 0000ffd4   __TI_int42
 0000ffd6   __TI_int43
@@ -1845,43 +1875,44 @@ address    name
 0000fffa   __TI_int61
 0000fffc   __TI_int62
 0000fffe   _reset_vector
-00010000   clk_init
-0001008e   _auto_init_hold_wdt
-0001015e   __mspabi_divul
-0001015e   __mspabi_remul
-000101b6   SetVcoreUp
-00010204   __mspabi_srll_15
-00010208   __mspabi_srll_14
-0001020c   __mspabi_srll_13
-00010210   __mspabi_srll_12
-00010214   __mspabi_srll_11
-00010218   __mspabi_srll_10
-0001021c   __mspabi_srll_9
-00010220   __mspabi_srll_8
-00010224   __mspabi_srll_7
-00010228   __mspabi_srll_6
-0001022c   __mspabi_srll_5
-00010230   __mspabi_srll_4
-00010234   __mspabi_srll_3
-00010238   __mspabi_srll_2
-0001023c   __mspabi_srll_1
-00010242   __mspabi_fltulf
-00010274   freq_cap_init
-0001029e   spi_init
-000102c6   __TI_zero_init
-000102ea   spi_write
-00010304   main
-0001031a   memcpy
-0001032e   __TI_decompress_none
-00010340   __TI_ISR_TRAP
-00010346   __TI_decompress_rle24
-0001034c   _system_pre_init
-00010350   C$$EXIT
-00010350   abort
+00010000   GetKeyValue
+0001014c   KeyScan
+000101fc   clk_init
+0001028a   read_byte
+000102fe   _auto_init_hold_wdt
+0001036c   __mspabi_fixfi
+000103d4   lcd_init
+0001049a   write_zi
+000104fa   __mspabi_divul
+000104fa   __mspabi_remul
+00010552   SetVcoreUp
+000105a0   write_char
+000105ec   spi_write
+00010632   main
+0001066e   write
+000106a4   __mspabi_fltulf
+000106d6   __mspabi_divi
+000106d6   __mspabi_remi
+00010702   write_byte
+0001072e   freq_cap_init
+00010758   __TI_zero_init
+0001077c   key_Init
+00010796   memset
+000107ac   __mspabi_divu
+000107ac   __mspabi_remu
+000107c2   lcd_busy
+000107d6   memcpy
+000107ea   __TI_decompress_none
+000107fc   spi_init
+00010804   __TI_ISR_TRAP
+0001080a   __TI_decompress_rle24
+00010810   _system_pre_init
+00010814   C$$EXIT
+00010814   abort
 ffffffff   __binit__
 ffffffff   __c_args__
 ffffffff   binit
 UNDEFED    __TI_INITARRAY_Base
 UNDEFED    __TI_INITARRAY_Limit
 
-[817 symbols]
+[822 symbols]

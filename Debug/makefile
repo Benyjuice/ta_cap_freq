@@ -6,8 +6,10 @@ CG_TOOL_ROOT := /opt/ti/ccsv6/tools/compiler/msp430_4.3.3
 
 ORDERED_OBJS += \
 $(GEN_CMDS__FLAG) \
+"./MatrixKey.obj" \
 "./clk.obj" \
 "./freq_cap.obj" \
+"./lcd12864.obj" \
 "./main.obj" \
 "./spi_dac8043.obj" \
 "../lnk_msp430f5529.cmd" \
@@ -142,8 +144,8 @@ ta_cap_freq.hex: $(EXE_OUTPUTS)
 # Other Targets
 clean:
 	-$(RM) $(EXE_OUTPUTS__QUOTED)$(BIN_OUTPUTS__QUOTED)
-	-$(RM) "clk.pp" "freq_cap.pp" "main.pp" "spi_dac8043.pp" 
-	-$(RM) "clk.obj" "freq_cap.obj" "main.obj" "spi_dac8043.obj" 
+	-$(RM) "MatrixKey.pp" "clk.pp" "freq_cap.pp" "lcd12864.pp" "main.pp" "spi_dac8043.pp" 
+	-$(RM) "MatrixKey.obj" "clk.obj" "freq_cap.obj" "lcd12864.obj" "main.obj" "spi_dac8043.obj" 
 	-@echo 'Finished clean'
 	-@echo ' '
 
