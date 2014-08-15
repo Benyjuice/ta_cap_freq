@@ -11,6 +11,7 @@ main.obj: ../spi_dac8043.h
 main.obj: ../lcd12864.h
 main.obj: ../global_define.h
 main.obj: ../MatrixKey.h
+main.obj: ../adc12.h
 
 ../main.c: 
 /opt/ti/ccsv6/ccs_base/msp430/include/msp430.h: 
@@ -23,3 +24,4 @@ main.obj: ../MatrixKey.h
 ../lcd12864.h: 
 ../global_define.h: 
 ../MatrixKey.h: 
+../adc12.h: 

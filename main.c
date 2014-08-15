@@ -8,6 +8,7 @@
 #include "spi_dac8043.h"
 #include "lcd12864.h"
 #include "MatrixKey.h"
+#include "adc12.h"
 extern float freq;
 signed char thd,hud,dec,sig;
 
@@ -16,12 +17,15 @@ int main(void) {
     clk_init();
     lcd_init();
     spi_init();
+    P7DIR |= BIT4;
+    P8DIR |= BIT1+BIT2;
+    adc12_init();
     key_Init();
 	freq_cap_init();
 	write_zi(2,0,"DAC Scale:");
 	write_zi(0,0,"freq:");
 	_EINT();
-
+	//adc12_init();
 
 	while(1);
 	return 0;
@@ -36,6 +40,7 @@ void __attribute__ ((interrupt(TIMER1_A0_VECTOR))) TIMER1_A0_ISR (void)
 #error Compiler not supported!
 #endif
 {
+	P7OUT |= BIT4;
 	char key = KeyScan();
 	switch(key) {
 	case 0:
@@ -90,5 +95,5 @@ void __attribute__ ((interrupt(TIMER1_A0_VECTOR))) TIMER1_A0_ISR (void)
 	fr[2] = ((int)freq%100)/10+'0';
 	fr[3] = ((int)freq%10)+'0';
 	write_zi(1,0,fr);
-
+	P7OUT &= ~BIT4;
 }

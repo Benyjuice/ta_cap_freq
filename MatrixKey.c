@@ -1,8 +1,8 @@
 /*----------------------------------------------------------------------------------------------------------
-  ÎÄ¼þÃû  :  MatrixKey.c   ( msp430°æ )
-  ÃèÊö    :  4*4¾ØÕó¼üÅÌÇý¶¯°ü	V 0.1
-  ÈÕÆÚ	  :  2014-8-8
-  ÖÆ×÷ÈË  :  Beny
+  ï¿½Ä¼ï¿½ï¿½ï¿½  :  MatrixKey.c   ( msp430ï¿½ï¿½ )
+  ï¿½ï¿½ï¿½ï¿½    :  4*4ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½	V 0.1
+  ï¿½ï¿½ï¿½ï¿½	  :  2014-8-8
+  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½  :  Beny
 ----------------------------------------------------------------------------------------------------------*/
 #include <msp430.h>
 //#include "delay.h"
@@ -14,19 +14,19 @@
 #define MODE_2_MASK		0x0f
 //#define MODE_3_MASK		0xff
 
-//  ¾ØÕó¼üÅÌµÄ¶Ë¿ÚÓ³Éä-----------------------------------------------------------------
+//  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ÌµÄ¶Ë¿ï¿½Ó³ï¿½ï¿½-----------------------------------------------------------------
 
 #define KEY_PORT_OUT				P3OUT				//
 #define KEY_PORT_IN					P3IN
 #define KEY_PORT_REN				P3REN
 
-#define	KEY_PORT_SCAN_MODE_1	P3DIR = (MODE_1_MASK)	// µÍÎ»£¨ÐÐ£©ÉèÎªÊä³ö£¨É¨Ãè£©£¬¸ßÎ»£¨ÁÐ£©ÉèÎªÊäÈë£¨¼ì²â£©
-#define	KEY_PORT_SCAN_MODE_2	P3DIR = (MODE_2_MASK)	// µÍÎ»£¨ÐÐ£©ÉèÎªÊäÈë£¨¼ì²â£©£¬¸ßÎ»£¨ÁÐ£©ÉèÎªÊä³ö£¨É¨Ãè£©
-//#define	KEY_PORT_SCAN_MODE_3	TRISB = MODE_3_MASK	// µÍÎ»£¨ÐÐ£©ÉèÎªÊäÈë£¨¼ì²â£©£¬¸ßÎ»£¨ÁÐ£©ÉèÎªÊä³ö£¨É¨Ãè£©
+#define	KEY_PORT_SCAN_MODE_1	P3DIR = (MODE_1_MASK)	// ï¿½ï¿½Î»ï¿½ï¿½ï¿½Ð£ï¿½ï¿½ï¿½Îªï¿½ï¿½ï¿½ï¿½ï¿½É¨ï¿½è£©ï¿½ï¿½ï¿½ï¿½Î»ï¿½ï¿½ï¿½Ð£ï¿½ï¿½ï¿½Îªï¿½ï¿½ï¿½ë£¨ï¿½ï¿½â£©
+#define	KEY_PORT_SCAN_MODE_2	P3DIR = (MODE_2_MASK)	// ï¿½ï¿½Î»ï¿½ï¿½ï¿½Ð£ï¿½ï¿½ï¿½Îªï¿½ï¿½ï¿½ë£¨ï¿½ï¿½â£©ï¿½ï¿½ï¿½ï¿½Î»ï¿½ï¿½ï¿½Ð£ï¿½ï¿½ï¿½Îªï¿½ï¿½ï¿½ï¿½ï¿½É¨ï¿½è£©
+//#define	KEY_PORT_SCAN_MODE_3	TRISB = MODE_3_MASK	// ï¿½ï¿½Î»ï¿½ï¿½ï¿½Ð£ï¿½ï¿½ï¿½Îªï¿½ï¿½ï¿½ë£¨ï¿½ï¿½â£©ï¿½ï¿½ï¿½ï¿½Î»ï¿½ï¿½ï¿½Ð£ï¿½ï¿½ï¿½Îªï¿½ï¿½ï¿½ï¿½ï¿½É¨ï¿½è£©
 //-------------------------------------------------------------------------------------
 
 
-//  º¯ÊýÉùÃ÷---------------------------------------------------------------------------
+//  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½---------------------------------------------------------------------------
 unsigned char KeyScan (void);
 unsigned char GetKeyValue (void);
 //-------------------------------------------------------------------------------------
@@ -35,63 +35,63 @@ unsigned char GetKeyValue (void);
 
 
 /*-------------------------------------------------------------------------------------
-     ¾ØÕó¼üÅÌµÄ °´¼ü¼ì²â 
-			»ùÓÚ×´Ì¬»úË¼Ïë ±àÐ´µÄ¾ØÕó¼üÅÌ É¨Ãèº¯Êý Ö§³Ö ³¤°´ Á¬·¢¹¦ÄÜ		  
-  			ÎÞ°´¼ü°´ÏÂ  Ôò·µ»Ø   ÊýÖµ NO_KEY_PRESS(20)
+     ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ìµï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ 
+			ï¿½ï¿½ï¿½ï¿½×´Ì¬ï¿½ï¿½Ë¼ï¿½ï¿½ ï¿½ï¿½Ð´ï¿½Ä¾ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ É¨ï¿½èº¯ï¿½ï¿½ Ö§ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½		  
+  			ï¿½Þ°ï¿½ï¿½ï¿½ï¿½ï¿½  ï¿½ò·µ»ï¿½   ï¿½ï¿½Öµ NO_KEY_PRESS(20)
 --------------------------------------------------------------------------------------*/
 void key_Init()
 {
 	TA1CCTL0 = CCIE;                          // CCR0 interrupt enabled
-	TA1CCR0 = 4000-1; 						//1ms
+	TA1CCR0 = 40000-1; 						//10ms
 	TA1CTL = TASSEL_2 + MC_1 + TACLR;         // SMCLK, contmode, clear TAR
 	_EINT();
 }
 
 unsigned char KeyScan ( void )
 {
-	unsigned char curKeyValue = NO_KEY_PRESS;           	// µ±Ç°¶Áµ½µÄ  ¼üÖµ
-	static unsigned char keyValueBackup = NO_KEY_PRESS;		// ¼üÖµµÄ ±¸·Ý
-    static unsigned int keyPressTimer = 0;              	// °´¼ü°´ÏÂµÄ  Ê±¼äÖµ
-    static unsigned int keyQuickTimer = 0;					// °´¼üÁ¬·¢µÄÊ±¼ä¼ä¸ô
-    static unsigned char curStatus = KEY_STATUS_noKeyPress; // µ±Ç°µÄ×´Ì¬
-	unsigned char returnKeyValue; // ·µ»Ø µÄ¼üÖµ
+	unsigned char curKeyValue = NO_KEY_PRESS;           	// ï¿½ï¿½Ç°ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½  ï¿½ï¿½Öµ
+	static unsigned char keyValueBackup = NO_KEY_PRESS;		// ï¿½ï¿½Öµï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+    static unsigned int keyPressTimer = 0;              	// ï¿½ï¿½ï¿½ï¿½ï¿½Âµï¿½  Ê±ï¿½ï¿½Öµ
+    static unsigned int keyQuickTimer = 0;					// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½
+    static unsigned char curStatus = KEY_STATUS_noKeyPress; // ï¿½ï¿½Ç°ï¿½ï¿½×´Ì¬
+	unsigned char returnKeyValue; // ï¿½ï¿½ï¿½ï¿½ ï¿½Ä¼ï¿½Öµ
 
-	/* -----»ñÈ¡¼üÖµ----- */
+	/* -----ï¿½ï¿½È¡ï¿½ï¿½Öµ----- */
 	curKeyValue = GetKeyValue();		
 
 	switch(curStatus) {
-		/* -----ÎÞ°´¼ü°´ÏÂÊ±µÄ×´Ì¬----- */
+		/* -----ï¿½Þ°ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½×´Ì¬----- */
 		case KEY_STATUS_noKeyPress: 
-			if( curKeyValue != NO_KEY_PRESS ) {// ÅÐ¶ÏÊÇ·ñÓÐ°´¼ü°´ÏÂ ÓÐÔò½øÈë °´¼üÏû¶¶×´Ì¬ ÎÞÔò ±£³Öµ±Ç°×´Ì¬
+			if( curKeyValue != NO_KEY_PRESS ) {// ï¿½Ð¶ï¿½ï¿½Ç·ï¿½ï¿½Ð°ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½×´Ì¬ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Öµï¿½Ç°×´Ì¬
 				keyValueBackup = curKeyValue;
 				curStatus = KEY_STATUS_filter; 					
 			}
 			returnKeyValue = NO_KEY_PRESS;
 			break;
-		/* -----Ïû¶¶×´Ì¬----- */	
+		/* -----ï¿½ï¿½×´Ì¬----- */	
 		case KEY_STATUS_filter:
 			if (curKeyValue == NO_KEY_PRESS) {
 				curStatus = KEY_STATUS_Release;
 			}else {
-				if( ++keyPressTimer > KEY_FILTER_TIME ) {	// ÅÐ¶ÏÏû¶¶ÊÇ·ñÍê³É Íê³ÉÔò½øÈë °´¼üµ¥»÷×´Ì¬ ·ñÔò±£³Öµ±Ç°×´Ì¬
+				if( ++keyPressTimer > KEY_FILTER_TIME ) {	// ï¿½Ð¶ï¿½ï¿½ï¿½ï¿½Ç·ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½×´Ì¬ ï¿½ï¿½ï¿½ò±£³Öµï¿½Ç°×´Ì¬
 					returnKeyValue = curKeyValue;
 					curStatus = KEY_STATUS_clicking;
 				}
 				else
-					returnKeyValue = NO_KEY_PRESS; //·µ»Ø ¼üÖµ
+					returnKeyValue = NO_KEY_PRESS; //ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Öµ
 			}
 				break;
-		/* -----µ¥»÷×´Ì¬----- */	
+		/* -----ï¿½ï¿½ï¿½ï¿½×´Ì¬----- */	
 		case KEY_STATUS_clicking: 
-			if( curKeyValue == NO_KEY_PRESS )	// ÅÐ¶Ï°´¼üÊÇ·ñ Ì§Æð ÊÇÔò ½øÈë °´¼üÊÍ·Å×´Ì¬£¬·ñÔò ÅÐ¶ÏÊÇ·ñ ³¤°´ ÊÇÔò½øÈë³¤°´×´Ì¬
+			if( curKeyValue == NO_KEY_PRESS )	// ï¿½Ð¶Ï°ï¿½ï¿½ï¿½ï¿½Ç·ï¿½ Ì§ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Í·ï¿½×´Ì¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ð¶ï¿½ï¿½Ç·ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ë³¤ï¿½ï¿½×´Ì¬
 				curStatus = KEY_STATUS_Release; 
 			else if( ++keyPressTimer > LONG_PRESS_TIME )			
 				curStatus = KEY_STATUS_longKeyPress; 
 			returnKeyValue = NO_KEY_PRESS; 
 			break;
-		/* -----°´¼üÁ¬·¢×´Ì¬----- */	
+		/* -----ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½×´Ì¬----- */	
 		case KEY_STATUS_longKeyPress: 		
-			if( curKeyValue == NO_KEY_PRESS ) {	// ÅÐ¶Ï°´¼üÊÇ·ñ Ì§Æð ÊÇÔò ½øÈë °´¼üÊÍ·Å×´Ì¬£¬·ñÔò °´¼üÁ¬·¢ 
+			if( curKeyValue == NO_KEY_PRESS ) {	// ï¿½Ð¶Ï°ï¿½ï¿½ï¿½ï¿½Ç·ï¿½ Ì§ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Í·ï¿½×´Ì¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ 
 				curStatus = KEY_STATUS_Release;	
 				returnKeyValue = NO_KEY_PRESS; 
 			}
@@ -100,7 +100,7 @@ unsigned char KeyScan ( void )
 				returnKeyValue = curKeyValue;
 			}
 			break;
-		/* -----°´¼üÊÍ·Å×´Ì¬----- */	
+		/* -----ï¿½ï¿½ï¿½ï¿½ï¿½Í·ï¿½×´Ì¬----- */	
 		case KEY_STATUS_Release:
 			keyValueBackup = NO_KEY_PRESS;
 			keyPressTimer = 0;
@@ -111,14 +111,14 @@ unsigned char KeyScan ( void )
 		default:
 			break;
 	}
-	/* -----·µ»Ø¼üÖµ----- */
+	/* -----ï¿½ï¿½ï¿½Ø¼ï¿½Öµ----- */
 	return returnKeyValue;	
 }
 
 /*-------------------------------------------------------------------------------------
-    ¾ØÕó¼üÅÌÉ¨Ãè²¢·µ»ØÏàÓ¦µÄ¼üÖµ		hang(0~3)-> 0  1  2  3
+    ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½É¨ï¿½è²¢ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ó¦ï¿½Ä¼ï¿½Öµ		hang(0~3)-> 0  1  2  3
 										lie(0~3)	4  5  6  7
-    °´¼ü½Ó¿Ú (KEY_PORT)  					^		8  9  10 11
+    ï¿½ï¿½ï¿½ï¿½Ó¿ï¿½ (KEY_PORT)  					^		8  9  10 11
 											|		12 13 14 15
 											|		16 17 18 19
 --------------------------------------------------------------------------------------*/
@@ -126,7 +126,7 @@ unsigned char GetKeyValue ( void )
 {
 	volatile unsigned char hangTemp,lieTemp,key_value;
 	
-	/* ----- È·¶¨ µÚ¼¸ÁÐ----- */	
+	/* ----- È·ï¿½ï¿½ ï¿½Ú¼ï¿½ï¿½ï¿½----- */	
 	KEY_PORT_REN = 0xff;
 	P3DS = 0xff;
 	P3DIR = 0xF0;
@@ -145,7 +145,7 @@ unsigned char GetKeyValue ( void )
 	//_NOP();
 	//lieTemp = (KEY_PORT_IN & (~MODE_1_MASK));
 		
-	/* -----È·¶¨ µÚ¼¸ÐÐ----- */
+	/* -----È·ï¿½ï¿½ ï¿½Ú¼ï¿½ï¿½ï¿½----- */
 
 	P3REN = 0xff;
 	_NOP();
@@ -171,7 +171,7 @@ unsigned char GetKeyValue ( void )
 	//_NOP();
 	//_NOP();
 	//hangTemp = KEY_PORT_IN & (~MODE_2_MASK);
-	/* -----°ÑÐÐÁÐ×éºÏÆðÀ´ È·¶¨¼üÖµ----- */
+	/* -----ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ È·ï¿½ï¿½ï¿½ï¿½Öµ----- */
 	key_value = (lieTemp | hangTemp);
 	switch( key_value ) {
 		case 0xee : key_value = 0; break;
@@ -193,7 +193,7 @@ unsigned char GetKeyValue ( void )
     		case 0xff : 
     		default :   key_value = NO_KEY_PRESS;
 	}
-	/* -----·µ»Ø ¼üÖµ----- */
+	/* -----ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Öµ----- */
 	return key_value;
 }
 

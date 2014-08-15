@@ -14,5 +14,8 @@ Pin Map
  * P1.4 -- E
 
 #Matrix Key
- * P3.0 - P3.7
+ * P3.0 -- P3.7
+
+#ADC12
+ * P6.1 -- Input
 
