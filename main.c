@@ -10,22 +10,21 @@
 #include "MatrixKey.h"
 #include "adc12.h"
 extern float freq;
-signed char thd,hud,dec,sig;
+unsigned int thd=0,hud=0,dec=0,sig=0;
 
 int main(void) {
     WDTCTL = WDTPW | WDTHOLD;	// Stop watchdog timer
     clk_init();
     lcd_init();
+	write_zi(2,0,"DAC Scale:");
+	write_zi(0,0,"freq:");
     spi_init();
     P7DIR |= BIT4;
     P8DIR |= BIT1+BIT2;
     adc12_init();
     key_Init();
 	freq_cap_init();
-	write_zi(2,0,"DAC Scale:");
-	write_zi(0,0,"freq:");
 	_EINT();
-	//adc12_init();
 
 	while(1);
 	return 0;
@@ -40,12 +39,16 @@ void __attribute__ ((interrupt(TIMER1_A0_VECTOR))) TIMER1_A0_ISR (void)
 #error Compiler not supported!
 #endif
 {
-	P7OUT |= BIT4;
 	char key = KeyScan();
 	switch(key) {
 	case 0:
 	case 1:
-	case 2:break;
+	case 2:
+		thd = hud;
+		hud = dec;
+		dec	= sig;
+		sig = key +1;
+		break;
 	case 3://Add
 		sig++;
 		if(sig == 10){
@@ -64,7 +67,12 @@ void __attribute__ ((interrupt(TIMER1_A0_VECTOR))) TIMER1_A0_ISR (void)
 		break;
 	case 4:
 	case 5:
-	case 6:break;
+	case 6:
+		thd = hud;
+		hud = dec;
+		dec	= sig;
+		sig = key;
+		break;
 	case 7://Dece
 		sig --;
 		if (sig == -1){
@@ -79,21 +87,39 @@ void __attribute__ ((interrupt(TIMER1_A0_VECTOR))) TIMER1_A0_ISR (void)
 			}
 		}
 		break;
+	case 8:
+	case 9:
+	case 10:
+		thd = hud;
+		hud = dec;
+		dec	= sig;
+		sig = key - 1;
+	case 11:break;
+	case 12:break;
+	case 13:
+		thd = hud;
+		hud = dec;
+		dec	= sig;
+		sig = 0;
+	case 14:
+		break;
+	case 15:
+		MPY = thd;
+		OP2 = 1000;
+		MAC = hud;
+		OP2 = 100;
+		MAC = dec;
+		OP2 = 10;
+		spi1_write(RESLO+sig);
+	default:break;
 	}
-	long dac_code=sig+dec*10;
-	if (hud == 1)
-		dac_code += 100;
-	dac_code = dac_code * 4096;
-	dac_code = dac_code / 100;
-	//spi_write(dac_code);
-	write_char(3,0,hud+'0');
-	write_char(3,1,dec+'0');
-	write_char(3,2,sig+'0');
+	unsigned char te[5]={thd+'0',hud+'0',dec+'0',sig+'0','\0'};
+	write_zi(3,0,te);
+	freq = 4783+ADC12MEM0 << 12;
 	unsigned char fr[5]={'\0'};
 	fr[0] = (int)freq/1000+'0';
 	fr[1] = ((int)freq%1000)/100+'0';
 	fr[2] = ((int)freq%100)/10+'0';
 	fr[3] = ((int)freq%10)+'0';
 	write_zi(1,0,fr);
-	P7OUT &= ~BIT4;
 }

@@ -10,12 +10,12 @@ void SetVcoreUp (unsigned int level);
 
 void clk_init()
 {
-	P1DIR |= BIT0;                            // ACLK set out to pins
-	  P1SEL |= BIT0;
-	  P2DIR |= BIT2;                            // SMCLK set out to pins
-	  P2SEL |= BIT2;
-	  P7DIR |= BIT7;                            // MCLK set out to pins
-	  P7SEL |= BIT7;
+	//P1DIR |= BIT0;                            // ACLK set out to pins
+	//  P1SEL |= BIT0;
+	 // P2DIR |= BIT2;                            // SMCLK set out to pins
+	 // P2SEL |= BIT2;
+	  //P7DIR |= BIT7;                            // MCLK set out to pins
+	  //P7SEL |= BIT7;
 
 
 	  P5SEL |= BIT2+BIT3;                       // Port select XT2

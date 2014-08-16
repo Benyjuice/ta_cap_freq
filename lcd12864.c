@@ -129,6 +129,10 @@ void write_char(uchar x,uchar y,uchar data)
 	        }
 		addr=addr+y;
 		write(com,0x30);
+		_NOP();
+		_NOP();
 		write(com,addr);
+		_NOP();
+		_NOP();
 		write(dat,data);
 }

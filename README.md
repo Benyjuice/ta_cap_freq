@@ -1,9 +1,14 @@
 Pin Map
 
-#DAC8043
+#DAC8043-1	Ë¥¼õ
  * P4.3 -- CLK
  * P4.2 -- SRI
  * P4.0 -- LD
+
+#DAC8043-2	Signal Output
+ * P2.4 -- CLK
+ * P2.5 -- SRI
+ * P2.6 -- LD
 
 #Frequency Capture
  * P2.3 -- TA2.0

@@ -9,8 +9,8 @@
 #define SPI_DAC8043_H_
 
 void spi_init();
-void spi_write(unsigned int spi_data);
-
+void spi1_write(unsigned int spi_data);
+void spi2_write(unsigned int spi_data);
 
 
 #endif /* SPI_DAC8043_H_ */

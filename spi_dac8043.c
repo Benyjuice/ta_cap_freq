@@ -6,12 +6,19 @@
  */
 #include "msp430.h"
 #include "spi_dac8043.h"
-#define LOD_H						(P4OUT |= BIT0)
-#define LOD_L							(P4OUT &= ~BIT0)
-#define CLK_H			P4OUT |= BIT3
-#define CLK_L			P4OUT &= ~BIT3
-#define SRI_H			P4OUT |= BIT2
-#define SRI_L			P4OUT &= ~BIT2
+#define LOD1_H						(P4OUT |= BIT0)
+#define LOD1_L							(P4OUT &= ~BIT0)
+#define CLK1_H			P4OUT |= BIT3
+#define CLK1_L			P4OUT &= ~BIT3
+#define SRI1_H			P4OUT |= BIT2
+#define SRI1_L			P4OUT &= ~BIT2
+
+#define LOD2_H					(P2OUT |= BIT6)
+#define LOD2_L 					(P2OUT &= ~BIT6)
+#define CLK2_H					(P2OUT |= BIT4)
+#define CLK2_L					(P2OUT &= ~BIT4)
+#define SRI2_H					(P2OUT |= BIT5)
+#define SRI2_L						(P2OUT &= ~BIT5)
 
 /*
  * P4.3 -- CLK
@@ -27,6 +34,7 @@ void spi_init()
 {
 	//P4SEL |= BIT1+BIT2+BIT3;//Pin select
 	P4DIR |= BIT0+BIT1 +BIT2 +BIT3;
+	P2DIR |= BIT4+BIT5+BIT6;
 	/*UCB1CTL1 |= UCSWRST;                      // **Put state machine in reset**
 	UCB1CTL0 |= UCMST+UCSYNC+UCCKPH+UCMSB;// + UC7BIT;    // 3-pin, 8-bit SPI master
 	                                            // Clock polarity high, MSB
@@ -37,42 +45,47 @@ void spi_init()
 	UCB1CTL1 &= ~UCSWRST;                     // **Initialize USCI state machine**/
 }
 
-void spi_write(unsigned int spi_data)
+void spi1_write(unsigned int spi_data)
 {
 	int temp = spi_data;
 	int i;
 	for (i = 0;i<12;i++) {
 		if(temp & 0x800)
-			SRI_H;
+			SRI1_H;
 		else
-			SRI_L;
+			SRI1_L;
 		_NOP();
 		_NOP();
 		_NOP();
-		CLK_H;
+		CLK1_H;
 		_NOP();
 		_NOP();
 		_NOP();
-		CLK_L;
+		CLK1_L;
 		_NOP();
 		_NOP();
 		_NOP();
 		temp <<= 1;
 	}
-	LOD_L;
-	LOD_H;
+	LOD1_L;
+	LOD1_H;
+}
 
-	/*LOD_H;
-	while(!(UCB1IFG & UCTXIFG));
-	UCB1TXBUF = spi_data >> 8;
-	while(!(UCB1IFG & UCTXIFG));
-	UCB1TXBUF = spi_data &0xff ;
-	while(!(UCB1IFG & UCTXIFG));
-	LOD_L;
-	_NOP();
-	_NOP();
-	LOD_H;*/
-
+void spi2_write(unsigned int spi_data)
+{
+	int temp = spi_data;
+	int i;
+	for (i = 0;i<12;i++) {
+		if(temp & 0x800)
+			SRI2_H;
+		else
+			SRI2_L;
+		CLK2_H;
+		CLK2_L;
+		temp <<= 1;
+	}
+	LOD2_L;
+	LOD2_H;
 }
 
 

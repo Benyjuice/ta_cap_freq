@@ -21,7 +21,7 @@
 #define KEY_STATUS_longKeyPress			3
 #define KEY_STATUS_Release			4
 
-#define KEY_FILTER_TIME	50		// ���� ʱ��			(�������ʱ����Ϊ����ɣ������ʱ������Ϊ�ǰ���״̬)
+#define KEY_FILTER_TIME	30		// ���� ʱ��			(�������ʱ����Ϊ����ɣ������ʱ������Ϊ�ǰ���״̬)
 #define LONG_PRESS_TIME	900		// ȷ�� ���� ��ʱ��		(�������ʱ�䣬��Ϊ ������¼�)
 #define QUICK_ACT_SPACE	100		// ���� ���� ʱ����
 //--------------------------------------------------------------------------------
