@@ -55,7 +55,7 @@ void __attribute__ ((interrupt(ADC12_VECTOR))) ADC12ISR (void)
 	  P8OUT |= BIT1;
 	  volatile fixed ta=filter(ADC12MEM0);
 	 //spi_write(1760);
-	 spi2_write((ADC12MEM0 ^ 0X8000)>>4);
+	 //spi2_write((ADC12MEM0 ^ 0X8000)>>4);
 	  P8OUT &= ~BIT1;
     break;
   default: break;
